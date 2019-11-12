@@ -1,20 +1,18 @@
 package com.test.springrest.exception;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.test.springrest.common.Constants;
 
 @ControllerAdvice
-public class ExceptionController {
+public class ExceptionController extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(CustomException.class)
-	public ErrorDetail retrieveError(HttpServletRequest httpServletRequest, Exception exception) {
-		ErrorDetail detail = new ErrorDetail();
-		detail.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		detail.setMessage("Service not available");
-		detail.setUrl(httpServletRequest.getRequestURL().toString());
-		return detail;
+	public ResponseEntity<String> error(Exception exception) {
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Constants.SERVICE_NOT_AVAILABLE);
 	}
 }
